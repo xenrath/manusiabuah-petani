@@ -8,6 +8,21 @@
     <color name="colorBlack">#FF000000</color>
     <color name="colorWhite">#FFFFFFFF</color>
 
+    <!--  Custom  -->
+    <color name="customPrimary">#007bff</color>
+    <color name="customSecondary">#6c757d</color>
+    <color name="customInfo">#17a2b8</color>
+    <color name="customSuccess">#28a745</color>
+    <color name="customWarning">#ffc107</color>
+    <color name="customDanger">#dc3545</color>
+
+    <color name="customGrayDark">#343a40</color>
+    <color name="customGray">#adb5bd</color>
+
+    <color name="customLime">#01ff70</color>
+    <color name="customTeal">#39cccc</color>
+    <color name="customOlive">#3d9970</color>
+
     <color name="colorPrimary">#001342</color>
     <color name="colorPrimaryDark">#001342</color>
     <color name="colorPrimarySoft">#204DBE</color>
@@ -23,4 +38,36 @@
 
     <color name="fragmentNotification">#EF9A9A</color>
     <color name="transparent">#00000000</color>
+
+    <!--  Sweet Alert  -->
+    <color name="blue_btn_bg_color">#AEDEF4</color>
+    <color name="blue_btn_bg_pressed_color">#96BFD2</color>
+    <color name="button_text_color">#FFFFFF</color>
+    <color name="error_stroke_color">#F27474</color>
+    <color name="float_transparent">#00000000</color>
+    <color name="gray_btn_bg_color">#D0D0D0</color>
+    <color name="gray_btn_bg_pressed_color">#B6B6B6</color>
+    <color name="material_blue_grey_80">#ff37474f</color>
+    <color name="material_blue_grey_90">#ff263238</color>
+    <color name="material_blue_grey_95">#ff21272b</color>
+    <color name="material_deep_teal_20">#ff80cbc4</color>
+    <color name="material_deep_teal_50">#ff009688</color>
+    <color name="red_btn_bg_color">#DD6B55</color>
+    <color name="red_btn_bg_pressed_color">#CD5B55</color>
+    <color name="success_stroke_color">#A5DC86</color>
+    <color name="sweet_dialog_bg_color">#FFFFFF</color>
+    <color name="text_color">#575757</color>
+    <color name="trans_success_stroke_color">#33A5DC86</color>
+    <color name="warning_stroke_color">#F8BB86</color>
+    <declare-styleable name="Rotate3dAnimation">
+        <attr format="enum" name="rollType">
+            <enum name="x" value="0"/>
+            <enum name="y" value="1"/>
+            <enum name="z" value="2"/>
+        </attr>
+        <attr format="float" name="fromDeg"/>
+        <attr format="float" name="toDeg"/>
+        <attr format="fraction" name="pivotX"/>
+        <attr format="fraction" name="pivotY"/>
+    </declare-styleable>
 </resources>

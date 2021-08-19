@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.xenrath.manusiabuahpetani.R
 import com.xenrath.manusiabuahpetani.data.database.PrefManager
 import com.xenrath.manusiabuahpetani.ui.HistoryActivity
+import com.xenrath.manusiabuahpetani.ui.login.LoginActivity
 import com.xenrath.manusiabuahpetani.ui.product.ProductActivity
 
 class ProfileFragment: Fragment(), ProfileContract.View {
@@ -46,7 +47,6 @@ class ProfileFragment: Fragment(), ProfileContract.View {
     override fun initListener(view: View) {
         btnLogout = view.findViewById(R.id.btn_logout)
         tvName = view.findViewById(R.id.tv_name)
-        tvEmail = view.findViewById(R.id.tv_email)
         btnUpdateProfile = view.findViewById(R.id.btn_update_profile)
         btnHistoryTransaction = view.findViewById(R.id.btn_history_transaction)
         btnMyProduct = view.findViewById(R.id.btn_my_product)
@@ -72,6 +72,7 @@ class ProfileFragment: Fragment(), ProfileContract.View {
 
     override fun onResultLogout() {
         requireActivity().finish()
+        startActivity(Intent(requireActivity(), LoginActivity::class.java))
     }
 
     override fun showMessage(message: String) {

@@ -23,55 +23,40 @@ import com.xenrath.manusiabuahpetani.ui.product.create.ProductCreateActivity
 import com.xenrath.manusiabuahpetani.ui.product.update.ProductUpdateActivity
 import com.xenrath.manusiabuahpetani.utils.GlideHelper
 import com.xenrath.manusiabuahpetani.utils.MapsHelper
+import com.xenrath.manusiabuahpetani.utils.sweetalert.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_my_product.*
-import kotlinx.android.synthetic.main.content_my_product.*
 import kotlinx.android.synthetic.main.dialog_product.view.*
+import kotlinx.android.synthetic.main.toolbar_custom.*
 
 class ProductActivity : AppCompatActivity(), ProductContract.View, OnMapReadyCallback {
 
     lateinit var prefManager: PrefManager
     lateinit var presenter: ProductPresenter
     private lateinit var productAdapter: ProductAdapter
+    private lateinit var sLoading: SweetAlertDialog
     lateinit var product: DataProduct
-
-    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_product)
 
-        setSupportActionBar(toolbar)
-
         prefManager = PrefManager(this)
         presenter = ProductPresenter(this)
-
-        userId = prefManager.prefId.toString()
     }
 
     override fun onStart() {
         super.onStart()
-        presenter.getProduct(userId)
+        presenter.getProduct(prefManager.prefId.toString())
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return super.onSupportNavigateUp()
-    }
-
+    @SuppressLint("SetTextI18n")
     override fun initActivity() {
-        supportActionBar!!.title = "Produk Saya"
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
+        tv_title.text = "Produk Saya"
+        sLoading = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
         MapsHelper.permissionMap(this, this)
-    }
-
-    override fun initListener() {
-        val layoutManager = LinearLayoutManager(applicationContext)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
 
         productAdapter = ProductAdapter(this, arrayListOf())
-        {
-            dataProduct: DataProduct, position: Int, type: String ->
+        { dataProduct: DataProduct, position: Int, type: String ->
             product = dataProduct
             when (type) {
                 "update" -> startActivity(Intent(this, ProductUpdateActivity::class.java))
@@ -79,29 +64,37 @@ class ProductActivity : AppCompatActivity(), ProductContract.View, OnMapReadyCal
                 "detail" -> showDialogDetail(dataProduct, position)
             }
         }
+    }
+
+    override fun initListener() {
+        iv_back.setOnClickListener {
+            finish()
+        }
+        iv_help.setOnClickListener {
+
+        }
+
+        val layoutManager = LinearLayoutManager(applicationContext)
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
 
         rv_product.adapter = productAdapter
         rv_product.layoutManager = layoutManager
-
-        srl_myproduct.setOnRefreshListener {
-            presenter.getProduct(userId)
-        }
 
         fab.setOnClickListener {
             startActivity(Intent(this, ProductCreateActivity::class.java))
         }
     }
 
-    override fun onLoading(loading: Boolean) {
-        when(loading) {
-            true -> srl_myproduct.isRefreshing = true
-            false -> srl_myproduct.isRefreshing = false
+    override fun onLoading(loading: Boolean, message: String?) {
+        when (loading) {
+            true -> sLoading.setTitleText(message).show()
+            false -> sLoading.dismiss()
         }
     }
 
     override fun onResult(responseProductList: ResponseProductList) {
-        val dataProduct: List<DataProduct> = responseProductList.dataProduct
-        productAdapter.setData(dataProduct)
+        val products: List<DataProduct> = responseProductList.products!!
+        productAdapter.setData(products)
     }
 
     override fun onResultDelete(responseProductUpdate: ResponseProductUpdate) {

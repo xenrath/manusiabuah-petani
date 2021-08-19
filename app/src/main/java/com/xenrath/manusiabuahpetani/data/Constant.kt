@@ -12,6 +12,11 @@ class Constant {
 
         var PRODUCT_ID: Long = 0
 
+        var PROVINCE_ID: String = "0"
+        var PROVINCE_NAME: String = ""
+        var CITY_ID: String = "0"
+        var CITY_NAME: String = ""
+
         var BARGAIN_ID: Long = 0
     }
 

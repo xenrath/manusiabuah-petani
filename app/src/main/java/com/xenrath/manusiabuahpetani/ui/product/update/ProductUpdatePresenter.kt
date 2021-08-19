@@ -2,7 +2,9 @@ package com.xenrath.manusiabuahpetani.ui.product.update
 
 import com.xenrath.manusiabuahpetani.data.database.model.ResponseProductDetail
 import com.xenrath.manusiabuahpetani.data.database.model.ResponseProductUpdate
+import com.xenrath.manusiabuahpetani.data.database.model.rajaongkir.ResponseRajaongkirTerritory
 import com.xenrath.manusiabuahpetani.network.ApiService
+import com.xenrath.manusiabuahpetani.network.ApiServiceRajaongkir
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -13,7 +15,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
-class ProductUpdatePresenter(val view: ProductUpdateContract.View): ProductUpdateContract.Presenter {
+class ProductUpdatePresenter(val view: ProductUpdateContract.View) :
+    ProductUpdateContract.Presenter {
 
     init {
         view.initActivity()
@@ -41,12 +44,63 @@ class ProductUpdatePresenter(val view: ProductUpdateContract.View): ProductUpdat
         })
     }
 
+    override fun getProvince(key: String) {
+        view.onLoadingTerritory(true)
+        ApiServiceRajaongkir.endPoint.getProvince(key)
+            .enqueue(object : Callback<ResponseRajaongkirTerritory> {
+                override fun onResponse(
+                    call: Call<ResponseRajaongkirTerritory>,
+                    responseRajaongkir: Response<ResponseRajaongkirTerritory>
+                ) {
+                    view.onLoadingTerritory(false)
+                    if (responseRajaongkir.isSuccessful) {
+                        val responseRajaongkirTerritory: ResponseRajaongkirTerritory? =
+                            responseRajaongkir.body()
+                        view.onResultProvince(responseRajaongkirTerritory!!)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseRajaongkirTerritory>, t: Throwable) {
+                    view.onLoading(false)
+                }
+
+            })
+    }
+
+    override fun getCity(key: String, id: String) {
+        view.onLoadingTerritory(true)
+        ApiServiceRajaongkir.endPoint.getCity(key, id)
+            .enqueue(object : Callback<ResponseRajaongkirTerritory> {
+                override fun onResponse(
+                    call: Call<ResponseRajaongkirTerritory>,
+                    responseRajaongkir: Response<ResponseRajaongkirTerritory>
+                ) {
+                    view.onLoadingTerritory(false)
+                    if (responseRajaongkir.isSuccessful) {
+                        val responseRajaongkirTerritory: ResponseRajaongkirTerritory? =
+                            responseRajaongkir.body()
+                        view.onResultCity(responseRajaongkirTerritory!!)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseRajaongkirTerritory>, t: Throwable) {
+                    view.onLoading(false)
+                }
+
+            })
+    }
+
     override fun updateProduct(
         id: Long,
         name: String,
         price: String,
         description: String,
         address: String,
+        province_id: String,
+        province_name: String,
+        city_id: String,
+        city_name: String,
+        postal_code: String,
         latitude: String,
         longitude: String,
         image: File?,
@@ -55,7 +109,7 @@ class ProductUpdatePresenter(val view: ProductUpdateContract.View): ProductUpdat
         val requestBody: RequestBody
         val multipartBody: MultipartBody.Part
 
-        if (image != null){
+        if (image != null) {
             requestBody = image.asRequestBody("image/*".toMediaTypeOrNull())
             multipartBody = MultipartBody.Part.createFormData("image", image.name, requestBody)
         } else {

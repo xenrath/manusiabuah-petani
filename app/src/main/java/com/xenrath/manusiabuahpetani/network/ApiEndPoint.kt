@@ -3,6 +3,7 @@ package com.xenrath.manusiabuahpetani.network
 import com.xenrath.manusiabuahpetani.data.ResponseProduct
 import com.xenrath.manusiabuahpetani.data.ResponseLogin
 import com.xenrath.manusiabuahpetani.data.database.model.*
+import com.xenrath.manusiabuahpetani.data.database.model.rajaongkir.ResponseRajaongkirTerritory
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -46,6 +47,17 @@ interface ApiEndPoint {
     fun searchProduct(
         @Query("keyword") keyword: String
     ): Call<ResponseProduct>
+
+    @GET("province")
+    fun getProvince(
+        @Header("key") key: String
+    ): Call<ResponseRajaongkirTerritory>
+
+    @GET("city")
+    fun getCity(
+        @Header("key") key: String,
+        @Query("province") id: String
+    ): Call<ResponseRajaongkirTerritory>
 
     @Multipart
     @POST("product")

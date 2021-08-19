@@ -7,7 +7,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProductPresenter(val view: ProductContract.View): ProductContract.Presenter {
+class ProductPresenter(val view: ProductContract.View) : ProductContract.Presenter {
 
     init {
         view.initActivity()
@@ -15,7 +15,7 @@ class ProductPresenter(val view: ProductContract.View): ProductContract.Presente
     }
 
     override fun getProduct(user_id: String) {
-        view.onLoading(true)
+        view.onLoading(true, "Menampilkan produk...")
         ApiService.endPoint.myProduct(user_id).enqueue(object : Callback<ResponseProductList> {
             override fun onResponse(
                 call: Call<ResponseProductList>,
@@ -35,12 +35,8 @@ class ProductPresenter(val view: ProductContract.View): ProductContract.Presente
     }
 
     override fun deleteProduct(id: Long) {
-        view.onLoading(true)
-        ApiService.endPoint.deleteMyProduct(id).enqueue(object : Callback<ResponseProductUpdate> {
-            override fun onFailure(call: Call<ResponseProductUpdate>, t: Throwable) {
-                view.onLoading(false)
-            }
-
+        view.onLoading(true, "Menghapus produk")
+        ApiService.endPoint.deleteProduct(id).enqueue(object : Callback<ResponseProductUpdate> {
             override fun onResponse(
                 call: Call<ResponseProductUpdate>,
                 response: Response<ResponseProductUpdate>
@@ -50,6 +46,10 @@ class ProductPresenter(val view: ProductContract.View): ProductContract.Presente
                     val responseProductUpdate: ResponseProductUpdate? = response.body()
                     view.onResultDelete(responseProductUpdate!!)
                 }
+            }
+
+            override fun onFailure(call: Call<ResponseProductUpdate>, t: Throwable) {
+                view.onLoading(false)
             }
         })
     }

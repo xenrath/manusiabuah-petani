@@ -14,7 +14,7 @@ interface ProductContract {
     interface View {
         fun initActivity()
         fun initListener()
-        fun onLoading(loading: Boolean)
+        fun onLoading(loading: Boolean, message: String? = "Loading...")
         fun onResult(resultProductList: ResponseProductList)
         fun onResultDelete(responseProductUpdate: ResponseProductUpdate)
         fun showDialogDelete(dataProduct: DataProduct, position: Int)
